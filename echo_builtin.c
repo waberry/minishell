@@ -16,15 +16,21 @@ static void	ft_putstr_newline(char *s, int no_newline)
 		++i;
 	}
 }
-#include <stdio.h>
+
 void	echo_builtin(t_vars *vars, char *string, int no_newline)
 {	
+	char	*tmp;
+
 	if (string[0] == '\"' && string[1] == '$')
 		remove_quotes(&(string));
 	if (string[0] == '$' || ft_strchr(string, '$'))
 	{
-		int i = get_var_index(vars, (string + 1));
-		ft_putstr_newline(vars->g_envv[i], no_newline);
+		//int i = get_var(vars, (string + 1));
+		tmp = get_var(vars, (string + 1));
+		if (ft_strcmp(tmp, "@") != 0)
+			ft_putstr_newline(tmp, no_newline);
+		free(tmp);
+		tmp = NULL;
 	}
 	else
 		ft_putstr_newline(string, no_newline);

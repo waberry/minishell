@@ -15,7 +15,6 @@ void	parse_unsetenv(t_vars *vars, char **command)
 		i = get_var_index(vars, (command[1] + 1));
 		if (i == -1)
 			return ;
-		//ft_putendl(vars->g_envv[i]);
 		free(vars->g_envv[i]);
 		vars->g_envv[i] = ft_strdup((command[1] + 1));
 		vars->g_envv[i] = ft_strjoin(vars->g_envv[i], "=");

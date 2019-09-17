@@ -67,14 +67,16 @@ int		get_var_index(t_vars *vars, char *varname)
 char	*get_var(t_vars *vars, char *varname)
 {
 	int		i;
+	char	tmp[1024];
 
 	i = 0;
 	while (vars->g_envv[i])
 	{
-		if (ft_strstr(vars->g_envv[i], varname))
-		{
+		get_varname(vars->g_envv[i], tmp);
+		if (ft_strcmp(tmp, varname) == 0)
 			return (ft_strdup(ft_strchr(vars->g_envv[i], '=') + 1));
-		}
+		else
+			ft_bzero(tmp, 1024);
 		++i;
 	}
 	return (NULL);
@@ -83,11 +85,16 @@ char	*get_var(t_vars *vars, char *varname)
 void	print_myenv(t_vars *vars)
 {
 	int		i;
+	char	*value;
+	char	varname[1024];
 
 	i = 0;
 	while (vars->g_envv[i])
 	{
-		//if (ft_strcmp(vars->g_envv[i], "@") != 0)
+		ft_bzero(varname, 1024);
+		get_varname(vars->g_envv[i], varname);
+		value = get_var(vars, varname);
+		if (ft_strcmp(value, "@") != 0)
 			ft_putendl(vars->g_envv[i]);
 		++i;
 	}
@@ -113,6 +120,3 @@ void	remove_quotes(char **s)
 	*s = ft_strdup(tmp);
 	free(tmp);
 }
-
-
-
