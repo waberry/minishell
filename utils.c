@@ -120,3 +120,19 @@ void	remove_quotes(char **s)
 	*s = ft_strdup(tmp);
 	free(tmp);
 }
+
+void	free_tbl(char **tbl)
+{
+	int		i;
+
+	if (!tbl || !*tbl)
+		return ;
+	i = 0;
+	while (tbl[i])
+	{
+		free(tbl[i]);
+		++i;
+	}
+	free(tbl);
+	tbl = NULL;
+}

@@ -34,16 +34,8 @@ void	display_prompt_msg(t_vars *vars)
 
 void	exit_shell(t_vars *vars)
 {
-	int		i;
-
-	i = 0;
-	while (vars && vars->g_envv[i])
-	{
-		free(vars->g_envv[i]);
-		++i;
-	}
-	if (vars->home)
-		free(vars->home);
+	free_tbl(vars->g_envv);
+	free(vars);
 	write(1, "\n", 1);
 	exit(0);
 }
@@ -60,6 +52,14 @@ void		run_commands(char **command, t_vars *vars)
 		parse_setenv(vars, command);
 	else if (ft_strcmp(command[0], "unsetenv") == 0)
 		parse_unsetenv(vars, command);
+	else if (ft_strcmp(command[0], "cd") == 0)
+		parse_cd(vars, command);
+	else
+	{
+		ft_putstr("minishell: command not found: ")
+		ft_putendl(command[0]);
+		return;
+	}
 }
 
 void		get_input(char **input, t_vars *vars)
@@ -105,7 +105,9 @@ int		main(int argc, char **argv, char **env)
 		if (user_input)
 		{
 			parsed_input = ft_strsplit(user_input, ' ');
+			free(user_input);
 			run_commands(parsed_input, vars);
+			free_tbl(parsed_input);
 		}
 	}
 	return (0);

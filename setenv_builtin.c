@@ -17,7 +17,7 @@ char	**load_env_var(char **env)
 	return (ret);
 }
 
-char	*get_home_path(char **env)
+char	*get_home_path(char **env, char *dest)
 {
 	int		i;
 
@@ -26,7 +26,7 @@ char	*get_home_path(char **env)
 	{
 		if (ft_strstr(env[i], "HOME="))
 		{
-			return (ft_strdup(ft_strchr(env[i], '=') + 1));
+			return (ft_strcpy(dest, ft_strchr(env[i], '=') + 1));
 		}
 		++i;
 	}
@@ -39,28 +39,10 @@ t_vars	*init_vars(char **env)
 
 	if (!(ret = (t_vars *)malloc(sizeof(t_vars))))
 		return (NULL);
-	ret->home = get_home_path(env);
+	get_home_path(env, ret->home);
 	getcwd(ret->cwd, PATH_MAX + 1);
 	ret->g_envv = load_env_var(env);
-	ret->m_commands = NULL;
-	ret->s_command = NULL;
 	return (ret);
-}
-
-void	free_tbl(char **tbl)
-{
-	int		i;
-
-	if (!tbl || !*tbl)
-		return ;
-	i = 0;
-	while (tbl[i])
-	{
-		free(tbl[i]);
-		++i;
-	}
-	free(tbl);
-	tbl = NULL;
 }
 
 void	add_var(t_vars *vars, char *varname, char *value)
@@ -113,7 +95,6 @@ void	parse_setenv(t_vars *vars, char **command)
 	else
 	{
 		i = get_var_index(vars, command[1]);
-		
 		tmp = ft_strdup(command[1]);
 		tmp = ft_strjoin(tmp,  "=");
 		tmp = ft_strjoin(tmp, command[2]);

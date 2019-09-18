@@ -26,17 +26,15 @@
 
 typedef struct	s_vars
 {
-	char	*home;
+	char	home[PATH_MAX + 1];
 	char	cwd[PATH_MAX + 1];
 	char	**g_envv;
-	char	**m_commands;
-	char	**s_command;
 }				t_vars;
 
 
 void	print_myenv(t_vars *vars);
 char	**load_env_var(char **env);
-char	*get_home_path(char **env);
+char	*get_home_path(char **env, char *dest);
 t_vars	*init_vars(char **env);
 void	parse_setenv(t_vars *vars, char **command);
 
@@ -47,6 +45,7 @@ char	*get_var(t_vars *vars, char *varname);
 int		get_var_index(t_vars *vars, char *varname);
 void	remove_quotes(char **s);
 void	get_varname(char *var, char *tmp);
+void	free_tbl(char **tbl);
 
 
 void	display_prompt_msg(t_vars *vars);
