@@ -16,7 +16,7 @@ CC=gcc
 
 CFLAGS=-Wall -Wextra -Werror
 
-SRC=./main.c ./utils.c ./unsetenv_builtin.c ./setenv_builtin.c ./echo_builtin.c
+SRC=./main.c ./utils.c ./unsetenv_builtin.c ./setenv_builtin.c ./echo_builtin.c ./cd_builtin.c
 
 OBJ=$(SRC:.c=.o)
 
