@@ -12,55 +12,18 @@
 
 #include "minishell.h"
 
-void	bold_blue(void)
-{
-	ft_putstr("\e[1;36m");
-}
 
-void	white(void)
-{
-	ft_putstr("\e[0m");
-}
 
 void	display_prompt_msg(t_vars *vars)
 {
 	bold_blue();
 	ft_putstr(vars->cwd);
-	//ft_putchar(' ');
 	white();
 	ft_putstr(" \033[31m︻\033[0m\033[32m┳\033[0m\033[33mデ");
 	ft_putstr("\033[0m\033[34m═\033[0m\033[35m—\033[0m$ ");
 }
 
-void	exit_shell(t_vars *vars)
-{
-	free_tbl(vars->g_envv);
-	free(vars);
-	write(1, "\n", 1);
-	exit(0);
-}
 
-void		run_commands(char **command, t_vars *vars)
-{
-	if (ft_strcmp(command[0], "exit") ==  0)
-		exit_shell(vars);
-	else if (ft_strcmp(command[0], "echo") == 0)
-		parse_echo(vars, command);
-	else if (ft_strcmp(command[0], "env") == 0)
-		print_myenv(vars);
-	else if (ft_strcmp(command[0], "setenv") == 0)
-		parse_setenv(vars, command);
-	else if (ft_strcmp(command[0], "unsetenv") == 0)
-		parse_unsetenv(vars, command);
-	else if (ft_strcmp(command[0], "cd") == 0)
-		parse_cd(vars, command);
-	else
-	{
-		ft_putstr("minishell: command not found: ")
-		ft_putendl(command[0]);
-		return;
-	}
-}
 
 void		get_input(char **input, t_vars *vars)
 {
@@ -86,7 +49,25 @@ void		get_input(char **input, t_vars *vars)
 	}
 }
 
-int		main(int argc, char **argv, char **env)
+int		is_builtin(char *command)
+{
+	if (ft_strcmp(command[0], "exit") ==  0)
+		return (1)
+	else if (ft_strcmp(command[0], "echo") == 0)
+		return (1)
+	else if (ft_strcmp(command[0], "env") == 0)
+		return (1)
+	else if (ft_strcmp(command[0], "setenv") == 0)
+		return (1)
+	else if (ft_strcmp(command[0], "unsetenv") == 0)
+		return (1)
+	else if (ft_strcmp(command[0], "cd") == 0)
+		return (1)
+	else
+		return (0);
+}
+
+int		main(int ac, char **av, char **env)
 {
 	char *user_input;
 	char **parsed_input;
@@ -94,10 +75,10 @@ int		main(int argc, char **argv, char **env)
 
 	vars = NULL;
 	vars = init_vars(env);
-	if (argc || !argc)
-		ft_putendl("testing argc");
-	if (argv || !argv)
-		ft_putendl("testing argv");
+	if (ac || !ac)
+		ft_putendl("testing ac");
+	if (av || !av)
+		ft_putendl("testing av");
 	while (1)
 	{
 		display_prompt_msg(vars);
@@ -106,7 +87,14 @@ int		main(int argc, char **argv, char **env)
 		{
 			parsed_input = ft_strsplit(user_input, ' ');
 			free(user_input);
-			run_commands(parsed_input, vars);
+			if (is_builtin(parsed_input))
+				run_commands(parsed_input, vars);
+			else
+			{
+				//run non builtin command
+				//if ()
+				//execve(parsed_input[0], av, env);
+			}	
 			free_tbl(parsed_input);
 		}
 	}
