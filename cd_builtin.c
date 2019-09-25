@@ -1,28 +1,47 @@
 #include "minishell.h"
 
+
+
 /*
-void	update_pwd(t_vars *vars)
+	Dont forget to save old cwd when switching to new cwd
+*/
+
+static void	go_home(t_vars *vars)
 {
 	int		i;
-	char	*tmp;
+	char	*home_path;
 
-	i = get_var_index(vars, "PWD");
-	tmp = get_var(vars, "PWD");
-	if (ft_strcmp(vars->cwd, tmp) != 0)
+	i = get_var_index(vars, "OLDPWD")
+	home_path = get_var(vars, "HOME")
+	if (i = -1)
+		add(vars, "OLDPWD", home_path);
+	else
 	{
-		free(vars->g_envv[i]);
-		vars->g_envv[i] = ft_strdup("PWD=");
-		vars->g_envv[i] = ft_strjoin(vars->g_envv[i], vars->cwd);
+
 	}
-}
-
-void	cd_builtin(t_vars *vars, char *path)
-{
-
 }
 
 void	parse_cd(t_vars *vars, char **command)
 {
+	int		i;
+	char	tmp[PATH_MAX + 1];
 
+	if (!command || !*command)
+		return ;
+	if (!command[1])
+		go_home(vars);
+	if (command[1][0] == '\"')
+		//remove quotes
+	if (ft_strcmp(command[1],  "-") == 0)
+		//go to last known pwd and stop
+	if (command[1][0] == '$')
+		//replace fill tmp with value or with command[2]
+	i = 0;
+	while (command[i])
+	{
+		ft_putstr(command[i]);
+		ft_putchar(' ');
+		++i;
+	}
+	ft_putchar('\n');
 }
-*/
