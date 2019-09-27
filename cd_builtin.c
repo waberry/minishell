@@ -29,7 +29,7 @@ static int	check_access(char *path)
 		ft_putstr(path);
 		ft_putchar('\n');
 	}
-	else if ((ret=access(path, F_OK)) == -1)
+	else if ((ret=access(path, X_OK)) == -1)
 	{
 		ft_putstr("cd: permission denied: ");
 		ft_putstr(path);

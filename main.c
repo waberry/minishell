@@ -6,13 +6,11 @@
 /*   By: berry <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/09 17:21:00 by berry             #+#    #+#             */
-/*   Updated: 2019/07/25 17:43:38 by berry            ###   ########.fr       */
+/*   Updated: 2019/09/27 21:14:45 by wdaher-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-
 
 void	display_prompt_msg(t_vars *vars)
 {
@@ -23,9 +21,7 @@ void	display_prompt_msg(t_vars *vars)
 	ft_putstr("\033[0m\033[34m═\033[0m\033[35m—\033[0m$ ");
 }
 
-
-
-void		get_input(char **input, t_vars *vars)
+void	get_input(char **input, t_vars *vars)
 {
 	int		ret;
 	char	buf;
@@ -49,22 +45,58 @@ void		get_input(char **input, t_vars *vars)
 	}
 }
 
-int		is_builtin(char *command)
+int		is_builtin(char **command)
 {
-	if (ft_strcmp(command[0], "exit") ==  0)
-		return (1)
+	if (ft_strcmp(command[0], "exit") == 0)
+		return (1);
 	else if (ft_strcmp(command[0], "echo") == 0)
-		return (1)
+		return (1);
 	else if (ft_strcmp(command[0], "env") == 0)
-		return (1)
+		return (1);
 	else if (ft_strcmp(command[0], "setenv") == 0)
-		return (1)
+		return (1);
 	else if (ft_strcmp(command[0], "unsetenv") == 0)
-		return (1)
+		return (1);
 	else if (ft_strcmp(command[0], "cd") == 0)
-		return (1)
+		return (1);
 	else
 		return (0);
+}
+
+void	execute(t_vars *vars, char **command)
+{
+	char			**path;
+	int				j;
+	char			buffer[PATH_MAX];
+	char			*tmp;
+	pid_t			p_id;
+
+	path = NULL;
+	tmp = get_var(vars, "PATH");
+	path = ft_strsplit(tmp, ':');
+	j = 0;
+	free(tmp);
+	tmp = NULL;
+	while (path[j] && path)
+	{
+		ft_memcpy(buffer, path[j], ft_strlen(path[j]));
+		ft_strcat(buffer, "/");
+		ft_strcat(buffer, command[0]);
+		if ((access(buffer, F_OK)) != -1)
+		{
+			p_id = fork();
+			//handle ~ and $
+			if (p_id == 0)
+				execve(buffer, command, vars->g_envv);
+			wait(&p_id);
+			return ;
+		}
+		ft_bzero(buffer, PATH_MAX);
+		++j;
+	}
+	ft_putstr("minishell: command not found: ");
+	ft_putendl(command[0]);
+	
 }
 
 int		main(int ac, char **av, char **env)
@@ -75,10 +107,8 @@ int		main(int ac, char **av, char **env)
 
 	vars = NULL;
 	vars = init_vars(env);
-	if (ac || !ac)
-		ft_putendl("testing ac");
-	if (av || !av)
-		ft_putendl("testing av");
+	av = NULL;
+	ac = 0;
 	while (1)
 	{
 		display_prompt_msg(vars);
@@ -91,9 +121,7 @@ int		main(int ac, char **av, char **env)
 				run_commands(parsed_input, vars);
 			else
 			{
-				//run non builtin command
-				//if ()
-				//execve(parsed_input[0], av, env);
+				execute(vars, parsed_input);
 			}	
 			free_tbl(parsed_input);
 		}
