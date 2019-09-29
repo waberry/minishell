@@ -1,44 +1,57 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: berry <marvin@42.fr>                       +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2018/12/27 18:40:51 by berry             #+#    #+#              #
-#    Updated: 2019/07/25 16:10:50 by berry            ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
+# Project file
+NAME = minishell
 
-NAME=minishell
+# Project builds and dirs
+SRCDIR = ./src/
+SRCNAMES = $(shell ls $(SRCDIR) | grep -E ".+\.c")
+SRC = $(addprefix $(SRCDIR), $(SRCNAMES))
+INC = ./inc/
+BUILDDIR = ./build/
+BUILDOBJS = $(addprefix $(BUILDDIR), $(SRCNAMES:.c=.o))
 
-CC=gcc
+# Libft builds and dirs
+LIBDIR = ./libft/
+LIBFT = ./libft/libft.a
+LIBINC = ./libft/includes/
 
-CFLAGS=-Wall -Wextra -Werror
+# Optimization and Compiler flags and commands
+CC = gcc
+CFLAGS = -Wall -Werror -Wextra
 
-SRC=./main.c ./utils.c ./exit.c ./colors.c ./run_command.c ./unsetenv_builtin.c ./setenv_builtin.c ./echo_builtin.c ./cd_builtin.c
+# Debugging flags
+DEBUG = -g
 
-OBJ=$(SRC:.c=.o)
+# Main rule
+all: $(BUILDDIR) $(LIBFT) $(NAME)
 
-RM=rm -f
+# Object dir rule
+$(BUILDDIR):
+	mkdir -p $(BUILDDIR)
 
-LIBFT= ./libft/libft.a
+# Objects rule
+$(BUILDDIR)%.o:$(SRCDIR)%.c
+	$(CC) $(CFLAGS) -I$(LIBINC) -I$(INC) -o $@ -c $<
 
-$(NAME):$(OBJ)
-		make -C ./libft/
-		$(CC) $(CFLAGS) -c $(SRC)
-		$(CC) $(CFLAGS) $(LIBFT) $(OBJ) -o $(NAME)
+# Project file rule
+$(NAME): $(BUILDOBJS)
+	$(CC) $(CFLAGS) -o $(NAME) $(BUILDOBJS) $(LIBFT)
 
-all:@$(NAME)
+# Libft rule
+$(LIBFT):
+	make -C $(LIBDIR)
 
+# Cleaning up the build files
 clean:
-	$(RM) $(OBJ)
-	make clean -C ./libft/
+	rm -rf $(BUILDDIR)
+	make -C $(LIBDIR) clean
 
+# Getting rid of the project file
 fclean: clean
-		rm -f $(NAME)
-		make fclean -C ./libft/
+	rm -rf $(NAME)
+	make -C $(LIBDIR) fclean
 
+# Do both of the above
 re: fclean all
 
-.PHONY: all clean fclean re
+# Just in case those files exist in the root dir
+.PHONY: all fclean clean re

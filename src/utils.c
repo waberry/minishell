@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: wdaher-a <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/29 21:16:46 by wdaher-a          #+#    #+#             */
+/*   Updated: 2019/09/29 21:36:51 by wdaher-a         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int		get_tbl_len(char **tbl)
@@ -44,7 +56,6 @@ void	get_varname(char *var, char *tmp)
 		++i;
 	}
 }
-
 
 int		get_var_index(t_vars *vars, char *varname)
 {
@@ -106,10 +117,10 @@ void	remove_quotes(char **s)
 	int		i;
 
 	if (!s || !(*s))
-		return;
+		return ;
 	if (*s[0] != '\"' || *s[ft_strlen(*s) - 1] != '\"')
 		return ;
-	if (!(tmp=(char*)malloc(sizeof(char)*ft_strlen(*s))))
+	if (!(tmp = (char*)malloc(sizeof(char) * ft_strlen(*s))))
 		return ;
 	i = ft_strlen(*s) - 2;
 	tmp = ft_strcpy(tmp, (*s + 1));
