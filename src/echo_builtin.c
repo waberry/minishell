@@ -33,7 +33,7 @@ void			echo_builtin(t_vars *vars, char *string, int no_newline)
 
 	if (string[0] == '\"' && string[1] == '$')
 		remove_quotes(&(string));
-	if (string[0] == '$' || ft_strchr(string, '$'))
+	if (string[0] == '$')
 	{
 		tmp = get_var(vars, (string + 1));
 		if (ft_strcmp(tmp, "@") != 0)

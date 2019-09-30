@@ -71,12 +71,12 @@ void	add_var(t_vars *vars, char *varname, char *value)
 		++i;
 	}
 	new_env[i] = ft_strdup(varname);
-	if (!value)
+	if (value == NULL)
 		new_env[i] = ft_strjoin(new_env[i], "=@");
 	else
 	{
-		ft_strjoin(new_env[i], "=");
-		ft_strjoin(new_env[i], value);
+		new_env[i] = ft_strjoin(new_env[i], "=");
+		new_env[i] = ft_strjoin(new_env[i], value);
 	}
 	new_env[++i] = NULL;
 	free_tbl(vars->g_envv);
@@ -86,6 +86,7 @@ void	add_var(t_vars *vars, char *varname, char *value)
 void	change_value(t_vars *vars, char **command)
 {
 	char	*tmp;
+	int		i;
 
 	tmp = ft_strdup(command[1]);
 	tmp = ft_strjoin(tmp, "=");
@@ -93,8 +94,9 @@ void	change_value(t_vars *vars, char **command)
 		tmp = ft_strjoin(tmp, "@");
 	else
 		tmp = ft_strjoin(tmp, command[2]);
-	free(vars->g_envv[get_var_index(vars, command[1])]);
-	vars->g_envv[get_var_index(vars, command[1])] = ft_strdup(tmp);
+	i = get_var_index(vars, command[1]);
+	free(vars->g_envv[i]);
+	vars->g_envv[i] = ft_strdup(tmp);
 	free(tmp);
 }
 
@@ -110,10 +112,7 @@ void	parse_setenv(t_vars *vars, char **command)
 	if (command[1][0] == '$' || command[1][0] == '\"')
 		return ;
 	if (get_var_index(vars, command[1]) == -1)
-	{
-		if (!command[2])
-			add_var(vars, command[1], NULL);
-	}
+		add_var(vars, command[1], (!command[2]) ? NULL : command[2]);
 	else
 		change_value(vars, command);
 }

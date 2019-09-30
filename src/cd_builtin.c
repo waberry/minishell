@@ -41,9 +41,15 @@ static int		check_access(char *path)
 		ft_putstr(path);
 		ft_putchar('\n');
 	}
-	else if ((ret = access(path, X_OK)) == -1)
+	else if ((ret = access(path, R_OK)) == -1)
 	{
 		ft_putstr("cd: permission denied: ");
+		ft_putstr(path);
+		ft_putchar('\n');
+	}
+	else if ((ret = access(path, X_OK)) == -1)
+	{
+		ft_putstr("cd: not a directory: ");
 		ft_putstr(path);
 		ft_putchar('\n');
 	}
@@ -69,6 +75,7 @@ static void		cd_builtin(t_vars *vars, char *newcwd)
 		tmp = ft_strjoin(tmp, "=");
 		tmp = ft_strjoin(tmp, newcwd);
 		free(vars->g_envv[i]);
+		chdir(newcwd);
 		vars->g_envv[i] = ft_strdup(tmp);
 		free(tmp);
 	}
@@ -76,6 +83,9 @@ static void		cd_builtin(t_vars *vars, char *newcwd)
 
 void			parse_cd(t_vars *vars, char **command)
 {
+	char	tmp_buff[PATH_MAX];
+	char	*tmp;
+
 	if (!command || !*command)
 		return ;
 	remove_quotes(&command[1]);
@@ -85,6 +95,14 @@ void			parse_cd(t_vars *vars, char **command)
 		cd_builtin(vars, get_var(vars, "OLDPWD"));
 	else if (command[1][0] == '$')
 		cd_builtin(vars, get_var(vars, (command[1] + 1)));
+	else if (ft_strcmp(command[1], "..") == 0)
+	{
+		tmp = get_var(vars, "PWD");
+		ft_memcpy(tmp_buff, tmp, ft_strchri_last(tmp, '/'));
+		cd_builtin(vars, tmp_buff);
+		free(tmp);
+		ft_bzero(tmp_buff, PATH_MAX);
+	}
 	else
 		cd_builtin(vars, command[1]);
 }

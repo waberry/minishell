@@ -44,6 +44,7 @@ int				get_var_index(t_vars *vars, char *varname);
 void			remove_quotes(char **s);
 void			get_varname(char *var, char *tmp);
 void			free_tbl(char **tbl);
+int				ft_strchri_last(const char *s, int c);
 
 void			display_prompt_msg(t_vars *vars);
 
