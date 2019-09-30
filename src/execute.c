@@ -40,12 +40,18 @@ void	execute(t_vars *vars, char **command)
 	path = NULL;
 	path = ft_strsplit(get_var(vars, "PATH"), ':');
 	j = 0;
+	ft_bzero(buffer, PATH_MAX);
 	while (path[j] && path)
 	{
-		ft_memcpy(buffer, path[j], ft_strlen(path[j]));
-		ft_strcat(buffer, "/");
-		ft_strcat(buffer, command[0]);
-		if ((access(buffer, F_OK)) != -1)
+		if (ft_strchr(command[0], '/') == NULL)
+		{
+			ft_memcpy(buffer, path[j], ft_strlen(path[j]));
+			ft_strcat(buffer, "/");
+			ft_strcat(buffer, command[0]);
+		}
+		else
+			ft_strcpy(buffer, command[0]);
+		if ((access(buffer, X_OK)) != -1)
 		{
 			if ((p_id = fork()) == 0)
 				execve(buffer, command, vars->g_envv);
@@ -57,6 +63,7 @@ void	execute(t_vars *vars, char **command)
 	}
 	ft_putstr("minishell: command not found: ");
 	ft_putendl(command[0]);
+	free_tbl(path);
 }
 
 void	parse_execute(t_vars *vars, char **command)
@@ -81,7 +88,7 @@ void	parse_execute(t_vars *vars, char **command)
 		if (ft_strcmp(command[i], "~") == 0)
 		{
 			free(command[i]);
-			command[i] = get_var(vars, "HOME");
+			command[i] = ft_strdup(get_var(vars, "HOME"));
 		}
 		++i;
 	}

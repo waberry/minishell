@@ -38,9 +38,9 @@ void			echo_builtin(t_vars *vars, char *string, int no_newline)
 		tmp = get_var(vars, (string + 1));
 		if (ft_strcmp(tmp, "@") != 0)
 			ft_putstr_newline(tmp, no_newline);
-		free(tmp);
-		tmp = NULL;
 	}
+	else if (ft_strcmp(string, "~") == 0)
+		ft_putstr_newline(get_var(vars, "HOME"), no_newline);
 	else
 		ft_putstr_newline(string, no_newline);
 }
@@ -49,19 +49,22 @@ void			parse_echo(t_vars *vars, char **command)
 {
 	int		i;
 
-	if (!command)
+	if (!command || !*command)
 		return ;
-	i = (ft_strcmp(command[1], "-n") == 0) ? 2 : 1;
-	while (command[i])
+	if (command[1])
 	{
-		if (ft_strcmp(command[1], "-n") == 0)
-			echo_builtin(vars, (char*)command[i], 1);
-		else
-			echo_builtin(vars, (char*)command[i], 0);
-		if (command[i + 1])
-			ft_putchar(' ');
-		++i;
+		i = (ft_strcmp(command[1], "-n") == 0) ? 2 : 1;
+		while (command[i])
+		{
+			if (ft_strcmp(command[1], "-n") == 0)
+				echo_builtin(vars, (char*)command[i], 1);
+			else
+				echo_builtin(vars, (char*)command[i], 0);
+			if (command[i + 1])
+				ft_putchar(' ');
+			++i;
+		}
+		if (ft_strcmp(command[1], "-n") != 0)
+			ft_putchar('\n');
 	}
-	if (ft_strcmp(command[1], "-n") != 0)
-		ft_putchar('\n');
 }

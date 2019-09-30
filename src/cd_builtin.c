@@ -22,8 +22,7 @@ static void		save_pwd(t_vars *vars)
 		add_var(vars, "OLDPWD", get_var(vars, "PWD"));
 	else
 	{
-		tmp = ft_strdup("OLDPWD");
-		tmp = ft_strjoin(tmp, "=");
+		tmp = ft_strdup("OLDPWD=");
 		tmp = ft_strjoin(tmp, get_var(vars, "PWD"));
 		free(vars->g_envv[i]);
 		vars->g_envv[i] = ft_strdup(tmp);
@@ -71,8 +70,7 @@ static void		cd_builtin(t_vars *vars, char *newcwd)
 		add_var(vars, "PWD", newcwd);
 	else
 	{
-		tmp = ft_strdup("PWD");
-		tmp = ft_strjoin(tmp, "=");
+		tmp = ft_strdup("PWD=");
 		tmp = ft_strjoin(tmp, newcwd);
 		free(vars->g_envv[i]);
 		chdir(newcwd);

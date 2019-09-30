@@ -17,7 +17,7 @@ char	**load_env_var(char **env)
 	int		i;
 	char	**ret;
 
-	if (!(ret = (char **)malloc(sizeof(char *) * get_tbl_len(env) + 1)))
+	if (!(ret = (char **)malloc(sizeof(char *) * (get_tbl_len(env) + 1))))
 		return (NULL);
 	i = 0;
 	while (env && env[i])

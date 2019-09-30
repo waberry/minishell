@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: wdaher-a <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/09/29 21:16:46 by wdaher-a          #+#    #+#             */
-/*   Updated: 2019/09/29 21:36:51 by wdaher-a         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "minishell.h"
 
@@ -75,7 +64,7 @@ char	*get_var(t_vars *vars, char *varname)
 	{
 		get_varname(vars->g_envv[i], tmp);
 		if (ft_strcmp(tmp, varname) == 0)
-			return (ft_strdup(ft_strchr(vars->g_envv[i], '=') + 1));
+			return ((ft_strchr(vars->g_envv[i], '=') + 1));
 		else
 			ft_bzero(tmp, 1024);
 		++i;
