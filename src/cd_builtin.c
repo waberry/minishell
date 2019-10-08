@@ -17,6 +17,7 @@ static void		save_pwd(t_vars *vars)
 	int		i;
 	char	*tmp;
 
+	tmp = NULL;
 	i = get_var_index(vars, "OLDPWD");
 	if (i == -1)
 		add_var(vars, "OLDPWD", get_var(vars, "PWD"));
