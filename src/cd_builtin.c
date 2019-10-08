@@ -15,19 +15,18 @@
 static void		save_pwd(t_vars *vars)
 {
 	int		i;
-	char	*tmp;
+	char	tmp[PATH_MAX];
 
-	tmp = NULL;
 	i = get_var_index(vars, "OLDPWD");
+	ft_bzero(tmp, PATH_MAX);
 	if (i == -1)
 		add_var(vars, "OLDPWD", get_var(vars, "PWD"));
 	else
 	{
-		tmp = ft_strdup("OLDPWD=");
-		tmp = ft_strjoin(tmp, get_var(vars, "PWD"));
+		ft_strcat(tmp, "OLDPWD=");
+		ft_strcat(tmp, get_var(vars, "PWD"));
 		free(vars->g_envv[i]);
 		vars->g_envv[i] = ft_strdup(tmp);
-		free(tmp);
 	}
 }
 
@@ -59,32 +58,38 @@ static int		check_access(char *path)
 static void		cd_builtin(t_vars *vars, char *newcwd)
 {
 	int		i;
-	char	*tmp;
+	char	tmp[PATH_MAX];
+	char	cwd[PATH_MAX];
 
+	ft_bzero(tmp, PATH_MAX);
+	ft_bzero(cwd, PATH_MAX);
 	if (!newcwd)
 		return ;
-	if (check_access(newcwd) == -1)
+	ft_strcat(cwd, newcwd);
+	if (check_access(cwd) == -1)
 		return ;
 	save_pwd(vars);
 	i = get_var_index(vars, "PWD");
 	if (i == -1)
-		add_var(vars, "PWD", newcwd);
+		add_var(vars, "PWD", cwd);
 	else
 	{
-		tmp = ft_strdup("PWD=");
-		tmp = ft_strjoin(tmp, newcwd);
+		ft_strcat(tmp, "PWD=");
+		ft_strcat(tmp, cwd);
 		free(vars->g_envv[i]);
-		chdir(newcwd);
+		chdir(cwd);
 		vars->g_envv[i] = ft_strdup(tmp);
-		free(tmp);
+		ft_bzero(tmp, PATH_MAX);
 	}
 }
 
 void			parse_cd(t_vars *vars, char **command)
 {
-	char	tmp_buff[PATH_MAX];
-	char	*tmp;
+	char	tmp_buff1[PATH_MAX];
+	char	tmp_buff2[PATH_MAX];
 
+	ft_bzero(tmp_buff1, PATH_MAX);
+	ft_bzero(tmp_buff2, PATH_MAX);
 	if (!command || !*command)
 		return ;
 	remove_quotes(&command[1]);
@@ -96,11 +101,11 @@ void			parse_cd(t_vars *vars, char **command)
 		cd_builtin(vars, get_var(vars, (command[1] + 1)));
 	else if (ft_strcmp(command[1], "..") == 0)
 	{
-		tmp = get_var(vars, "PWD");
-		ft_memcpy(tmp_buff, tmp, ft_strchri_last(tmp, '/'));
-		cd_builtin(vars, tmp_buff);
-		free(tmp);
-		ft_bzero(tmp_buff, PATH_MAX);
+		ft_strcat(tmp_buff2, get_var(vars, "PWD"));
+		ft_memcpy(tmp_buff1, tmp_buff2, ft_strchri_last(tmp_buff2, '/'));
+		cd_builtin(vars, tmp_buff1);
+		ft_bzero(tmp_buff1, PATH_MAX);
+		ft_bzero(tmp_buff2, PATH_MAX);
 	}
 	else
 		cd_builtin(vars, command[1]);

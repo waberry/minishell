@@ -15,7 +15,9 @@
 void	parse_unsetenv(t_vars *vars, char **command)
 {
 	int		i;
+	char	tmp[PATH_MAX];
 
+	ft_bzero(tmp, PATH_MAX);
 	if (!command || !(*command))
 		return ;
 	if (!command[1])
@@ -26,7 +28,7 @@ void	parse_unsetenv(t_vars *vars, char **command)
 	if (i == -1)
 		return ;
 	free(vars->g_envv[i]);
-	vars->g_envv[i] = ft_strdup((command[1]));
-	vars->g_envv[i] = ft_strjoin(vars->g_envv[i], "=");
-	vars->g_envv[i] = ft_strjoin(vars->g_envv[i], "@");
+	ft_strcat(tmp, command[1]);
+	ft_strcat(tmp, "=@");
+	vars->g_envv[i] = ft_strdup(tmp);
 }

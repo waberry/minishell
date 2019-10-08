@@ -62,7 +62,7 @@ void	add_var(t_vars *vars, char *varname, char *value)
 	char	**new_env;
 
 	init_size = get_tbl_len(vars->g_envv);
-	if (!(new_env = (char **)malloc(sizeof(char *) * init_size + 2)))
+	if (!(new_env = (char **)malloc(sizeof(char *) * (init_size + 2))))
 		return ;
 	i = 0;
 	while (vars->g_envv[i])
@@ -85,19 +85,19 @@ void	add_var(t_vars *vars, char *varname, char *value)
 
 void	change_value(t_vars *vars, char **command)
 {
-	char	*tmp;
+	char	tmp[PATH_MAX];
 	int		i;
 
-	tmp = ft_strdup(command[1]);
-	tmp = ft_strjoin(tmp, "=");
+	ft_bzero(tmp, PATH_MAX);
+	ft_strcat(tmp, command[1]);
+	ft_strcat(tmp, "=");
 	if (!command[2])
-		tmp = ft_strjoin(tmp, "@");
+		ft_strcat(tmp, "@");
 	else
-		tmp = ft_strjoin(tmp, command[2]);
+		ft_strcat(tmp, command[2]);
 	i = get_var_index(vars, command[1]);
 	free(vars->g_envv[i]);
 	vars->g_envv[i] = ft_strdup(tmp);
-	free(tmp);
 }
 
 void	parse_setenv(t_vars *vars, char **command)

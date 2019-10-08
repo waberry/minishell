@@ -59,16 +59,18 @@ int		main(int ac, char **av, char **env)
 	{
 		display_prompt_msg(vars);
 		get_input(&user_input, vars);
-		if (user_input)
+		if (ft_strlen(user_input) > 0)
 		{
 			parsed_input = ft_strsplit(user_input, ' ');
-			free(user_input);
+			//free(user_input);
 			if (is_builtin(parsed_input))
 				run_commands(parsed_input, vars);
 			else
 				parse_execute(vars, parsed_input);
 			free_tbl(parsed_input);
 		}
+		if (user_input)
+			free(user_input);
 	}
 	return (0);
 }

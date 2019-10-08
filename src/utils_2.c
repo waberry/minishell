@@ -57,9 +57,10 @@ int		ft_strchri_last(const char *s, int c)
 char	*get_var(t_vars *vars, char *varname)
 {
 	int		i;
-	char	tmp[1024];
+	char	tmp[PATH_MAX];
 
 	i = 0;
+	ft_bzero(tmp, PATH_MAX);
 	while (vars->g_envv[i])
 	{
 		get_varname(vars->g_envv[i], tmp);
