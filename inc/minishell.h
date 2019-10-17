@@ -31,7 +31,6 @@ typedef struct	s_vars
 
 void			print_myenv(t_vars *vars);
 char			**load_env_var(char **env);
-char			*get_home_path(char **env, char *dest);
 t_vars			*init_vars(char **env);
 void			add_var(t_vars *vars, char *varname, char *value);
 void			change_value(t_vars *vars, char **command);

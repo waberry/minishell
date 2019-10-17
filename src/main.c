@@ -65,7 +65,8 @@ int		main(int ac, char **av, char **env)
 				run_commands(parsed_input, vars);
 			else
 				parse_execute(vars, parsed_input);
-			free_tbl(parsed_input);
+			if (parsed_input)
+				free_tbl(parsed_input);
 		}
 		if (vars->user_input)
 			free(vars->user_input);

@@ -12,16 +12,6 @@
 
 #include "minishell.h"
 
-/*
-void	histore(t_vars *vars)
-{
-	if (vars->hist == NULL)
-		vars->hist = ft_lstnew(vars->user_input, ft_strlen(user_input))
-	else
-		ft_lstadd();
-}
-*/
-
 int		run_commands(char **command, t_vars *vars)
 {
 	if (ft_strcmp(command[0], "exit") == 0)
@@ -42,6 +32,5 @@ int		run_commands(char **command, t_vars *vars)
 		ft_putendl(command[0]);
 		return (-1);
 	}
-	//hist(t_vars *vars, user_input);
 	return (0);
 }

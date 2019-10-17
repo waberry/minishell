@@ -29,22 +29,6 @@ char	**load_env_var(char **env)
 	return (ret);
 }
 
-char	*get_home_path(char **env, char *dest)
-{
-	int		i;
-
-	i = 0;
-	while (env[i])
-	{
-		if (ft_strstr(env[i], "HOME="))
-		{
-			return (ft_strcpy(dest, ft_strchr(env[i], '=') + 1));
-		}
-		++i;
-	}
-	return (NULL);
-}
-
 t_vars	*init_vars(char **env)
 {
 	t_vars	*ret;

@@ -15,6 +15,8 @@
 void	exit_shell(t_vars *vars)
 {
 	free_tbl(vars->g_envv);
+	if (vars->user_input)
+		free(vars->user_input);
 	free(vars);
 	write(1, "\n", 1);
 	exit(0);

@@ -83,18 +83,38 @@ static void		cd_builtin(t_vars *vars, char *newcwd)
 	}
 }
 
+
+void static		add_home_path(t_vars *vars, char *path)
+{
+	char	tmp[PATH_MAX];
+
+	if (!path || ft_strchr(path, '~') == NULL)
+		return ;
+	if (ft_strlen(path) > 1 && path[0] == '~')
+	{
+		ft_bzero(tmp, PATH_MAX);
+		ft_strcat(tmp, get_var(vars, "HOME"));
+		ft_strcat(tmp, (path + 1));
+		ft_bzero(path, PATH_MAX);
+		ft_strcat(path, tmp);
+		ft_bzero(tmp, PATH_MAX);
+	}
+}
+
 void			parse_cd(t_vars *vars, char **command)
 {
 	char	tmp_buff1[PATH_MAX];
 	char	tmp_buff2[PATH_MAX];
+	char	tmp_buff3[PATH_MAX];
 
 	ft_bzero(tmp_buff1, PATH_MAX);
 	ft_bzero(tmp_buff2, PATH_MAX);
+	ft_bzero(tmp_buff3, PATH_MAX);
 	if (!command || !*command)
 		return ;
-	if (command[1][0] == '\"')
+	if (command[1] && command[1][0] == '\"')
 		remove_quotes(&command[1]);
-	if (!command[1] || (ft_strcmp(command[1], "~") == 0))
+	if (command[1] == NULL || (ft_strcmp(command[1], "~") == 0))
 		cd_builtin(vars, get_var(vars, "HOME"));
 	else if ((ft_strcmp(command[1], "-")) == 0)
 		cd_builtin(vars, get_var(vars, "OLDPWD"));
@@ -109,5 +129,9 @@ void			parse_cd(t_vars *vars, char **command)
 		ft_bzero(tmp_buff2, PATH_MAX);
 	}
 	else
-		cd_builtin(vars, command[1]);
+	{
+		ft_strcat(tmp_buff3, command[1]);
+		add_home_path(vars, tmp_buff3);
+		cd_builtin(vars, tmp_buff3);
+	}
 }

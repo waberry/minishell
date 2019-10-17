@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int		is_builtin(char **command)
+int			is_builtin(char **command)
 {
 	if (ft_strcmp(command[0], "exit") == 0)
 		return (1);
@@ -30,7 +30,20 @@ int		is_builtin(char **command)
 		return (0);
 }
 
-void	execute(t_vars *vars, char **command)
+static void	format_path(char *buffer, char *binname, char *path)
+{
+	ft_bzero(buffer, PATH_MAX);
+	if (ft_strchr(binname, '/') == NULL)
+	{
+		ft_memcpy(buffer, path, ft_strlen(path));
+		ft_strcat(buffer, "/");
+		ft_strcat(buffer, binname);
+	}
+	else
+		ft_strcpy(buffer, binname);
+}
+
+void		execute(t_vars *vars, char **command)
 {
 	char			**path;
 	int				j;
@@ -40,23 +53,15 @@ void	execute(t_vars *vars, char **command)
 	path = NULL;
 	path = ft_strsplit(get_var(vars, "PATH"), ':');
 	j = 0;
-	ft_bzero(buffer, PATH_MAX);
 	while (path[j] && path)
 	{
-		if (ft_strchr(command[0], '/') == NULL)
-		{
-			ft_memcpy(buffer, path[j], ft_strlen(path[j]));
-			ft_strcat(buffer, "/");
-			ft_strcat(buffer, command[0]);
-		}
-		else
-			ft_strcpy(buffer, command[0]);
+		format_path(buffer, command[0], path[j]);
 		if ((access(buffer, X_OK)) != -1)
 		{
 			if ((p_id = fork()) == 0)
 				execve(buffer, command, vars->g_envv);
 			wait(&p_id);
-			//histore here !
+			free_tbl(path);
 			return ;
 		}
 		ft_bzero(buffer, PATH_MAX);
@@ -67,7 +72,7 @@ void	execute(t_vars *vars, char **command)
 	free_tbl(path);
 }
 
-void	parse_execute(t_vars *vars, char **command)
+void		parse_execute(t_vars *vars, char **command)
 {
 	int		i;
 	char	*tmp;
