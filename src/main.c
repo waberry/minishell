@@ -6,7 +6,7 @@
 /*   By: wdaher-a <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/29 18:31:34 by wdaher-a          #+#    #+#             */
-/*   Updated: 2019/09/29 18:31:39 by wdaher-a         ###   ########.fr       */
+/*   Updated: 2019/10/14 17:32:54 by berry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ void	get_input(char **input, t_vars *vars)
 
 int		main(int ac, char **av, char **env)
 {
-	char	*user_input;
 	char	**parsed_input;
 	t_vars	*vars;
 
@@ -58,19 +57,18 @@ int		main(int ac, char **av, char **env)
 	while (1)
 	{
 		display_prompt_msg(vars);
-		get_input(&user_input, vars);
-		if (ft_strlen(user_input) > 0)
+		get_input(&vars->user_input, vars);
+		if (ft_strlen(vars->user_input) > 0)
 		{
-			parsed_input = ft_strsplit(user_input, ' ');
-			//free(user_input);
+			parsed_input = ft_strsplit(vars->user_input, ' ');
 			if (is_builtin(parsed_input))
 				run_commands(parsed_input, vars);
 			else
 				parse_execute(vars, parsed_input);
 			free_tbl(parsed_input);
 		}
-		if (user_input)
-			free(user_input);
+		if (vars->user_input)
+			free(vars->user_input);
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: berry <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/11 15:03:08 by berry             #+#    #+#             */
-/*   Updated: 2019/09/29 21:33:43 by wdaher-a         ###   ########.fr       */
+/*   Updated: 2019/10/14 16:57:18 by berry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 # include <sys/wait.h>
 # include <unistd.h>
 # include <stdlib.h>
-# include <signal.h>
 # include <dirent.h>
 # include <fcntl.h>
 # include "../libft/libft.h"
@@ -26,6 +25,8 @@
 typedef struct	s_vars
 {
 	char	**g_envv;
+	t_list	*hist;
+	char	*user_input;
 }				t_vars;
 
 void			print_myenv(t_vars *vars);

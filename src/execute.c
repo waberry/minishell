@@ -56,6 +56,7 @@ void	execute(t_vars *vars, char **command)
 			if ((p_id = fork()) == 0)
 				execve(buffer, command, vars->g_envv);
 			wait(&p_id);
+			//histore here !
 			return ;
 		}
 		ft_bzero(buffer, PATH_MAX);

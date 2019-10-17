@@ -36,7 +36,9 @@ void			echo_builtin(t_vars *vars, char *string, int no_newline)
 	if (string[0] == '$')
 	{
 		tmp = get_var(vars, (string + 1));
-		if (ft_strcmp(tmp, "@") != 0)
+		if (!tmp || ft_strcmp(tmp, "@") == 0)
+			ft_putstr_newline("", no_newline);
+		else
 			ft_putstr_newline(tmp, no_newline);
 	}
 	else if (ft_strcmp(string, "~") == 0)

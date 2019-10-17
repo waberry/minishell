@@ -8,8 +8,6 @@ void	remove_quotes(char **s)
 
 	if (!s || !(*s))
 		return ;
-	if (*s[0] != '\"' || *s[ft_strlen(*s) - 1] != '\"')
-		return ;
 	if (!(tmp = (char*)malloc(sizeof(char) * ft_strlen(*s))))
 		return ;
 	i = ft_strlen(*s) - 2;

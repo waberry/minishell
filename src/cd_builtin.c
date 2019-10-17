@@ -92,7 +92,8 @@ void			parse_cd(t_vars *vars, char **command)
 	ft_bzero(tmp_buff2, PATH_MAX);
 	if (!command || !*command)
 		return ;
-	remove_quotes(&command[1]);
+	if (command[1][0] == '\"')
+		remove_quotes(&command[1]);
 	if (!command[1] || (ft_strcmp(command[1], "~") == 0))
 		cd_builtin(vars, get_var(vars, "HOME"));
 	else if ((ft_strcmp(command[1], "-")) == 0)

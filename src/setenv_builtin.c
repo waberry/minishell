@@ -52,6 +52,8 @@ t_vars	*init_vars(char **env)
 	if (!(ret = (t_vars *)malloc(sizeof(t_vars))))
 		return (NULL);
 	ret->g_envv = load_env_var(env);
+	ret->hist = NULL;
+	ret->user_input = NULL;
 	return (ret);
 }
 
