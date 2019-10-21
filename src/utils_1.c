@@ -22,9 +22,20 @@ int		get_tbl_len(char **tbl)
 	return (count);
 }
 
-int		is_quote(char c)
+int		empty(char *s)
 {
-	return (c == '\"' || c == '\'');
+	int		res;
+	size_t	i;
+
+	res = 0;
+	i = 0;
+	while (s && s[i])
+	{
+		if ((s[i] >= 65 && s[i] <= 90) || (s[i] >= 97 && s[i] <= 122))
+			return (1);
+		++i;
+	}
+	return (0);
 }
 
 void	*ft_realloc(void *ptr, size_t prev_size, size_t new_size)

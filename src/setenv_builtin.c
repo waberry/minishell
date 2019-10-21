@@ -95,7 +95,9 @@ void	parse_setenv(t_vars *vars, char **command)
 		print_myenv(vars);
 		return ;
 	}
-	if (command[1][0] == '$' || command[1][0] == '\"')
+	if (command[2][0] == '\"')
+		remove_quotes(&command[2]);
+	if (command[1][0] == '$')
 		return ;
 	if (get_var_index(vars, command[1]) == -1)
 		add_var(vars, command[1], (!command[2]) ? NULL : command[2]);

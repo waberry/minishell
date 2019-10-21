@@ -1,44 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit.c                                             :+:      :+:    :+:   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wdaher-a <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/09/29 20:27:52 by wdaher-a          #+#    #+#             */
-/*   Updated: 2019/09/29 20:28:02 by wdaher-a         ###   ########.fr       */
+/*   Created: 2018/11/14 23:03:14 by wdaher-a          #+#    #+#             */
+/*   Updated: 2019/10/18 16:10:24 by wdaher-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#ifndef GET_NEXT_LINE_H
+# define GET_NEXT_LINE_H
+# define BUFF_SIZE 8
+# include "../libft/libft.h"
+# include <limits.h>
+# include <string.h>
+# include <unistd.h>
 
-static void	free_lst(t_list *l)
-{
-	t_list	*p;
+int		get_next_line(int const fd, char **line);
 
-	if (!l)
-		return ;
-	p = l;
-	while (l)
-	{
-		l = l->next;
-		free(p->content);
-		free(p);
-		p = l;
-	}
-	l = NULL;
-}
-
-
-void		exit_shell(t_vars *vars)
-{
-	t_list	*ptr;
-
-	ptr = vars->hist;
-	free_lst(vars->hist);
-	free_tbl(vars->g_envv);
-	if (vars->user_input)
-		free(vars->user_input);
-	free(vars);
-	exit(0);
-}
+#endif
