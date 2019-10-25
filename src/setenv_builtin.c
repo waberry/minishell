@@ -38,6 +38,7 @@ t_vars	*init_vars(char **env)
 	ret->g_envv = load_env_var(env);
 	ret->hist = NULL;
 	ret->user_input = NULL;
+	ret->commands = NULL;
 	return (ret);
 }
 

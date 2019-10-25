@@ -12,12 +12,14 @@
 
 #include "minishell.h"
 
-void			display_prompt_msg(t_vars *vars)
+void			display_prompt_msg(t_vars *vars, int ac, char **av)
 {
+	ac = 0;
+	av = NULL;
 	bold_blue();
 	ft_putstr(get_var(vars, "PWD"));
 	white();
-	//ft_putstr(" \033[31m︻\033[0m\033[32m┳\033[0m\033[33mデ");
+	ft_putstr(" \033[31m︻\033[0m\033[32m┳\033[0m\033[33mデ");
 	ft_putstr("\033[0m\033[34m═\033[0m\033[35m—\033[0m$ ");
 }
 
@@ -40,60 +42,36 @@ static char		**parse_input(t_vars *vars, char *user_input)
 	return (tmp);
 }
 
-static void		get_input(t_vars *vars, char **input)
-{
-	int		ret;
-	char	buf;
-	int		i;
-	int		count;
-
-	*input = ft_strnew(1);
-	count = 1;
-	i = 0;
-	while ((ret = read(0, &buf, 1)))
-	{
-		if (buf == '\n')
-			break ;
-		if (&buf[0] == '^[[A')
-			ft_putendl("UP");
-		*(*input + i++) = buf;
-		*input = ft_realloc(*input, count, count + 1);
-		count++;
-	}
-	*(*input + i) = '\0';
-	if (!ret)
-	{
-		free(*input);
-		exit_shell(vars);
-	}
-	//if ((ft_strchr(*input, '$') != NULL) || (ft_strchr(*input, '~') != NULL))
-		//*input = parse_input(*input);
-}
-
 int				main(int ac, char **av, char **env)
 {
 	char	**parsed_input;
 	t_vars	*vars;
+	int		i;
 
 	vars = NULL;
 	vars = init_vars(env);
-	av = NULL;
-	ac = 0;
 	while (1)
 	{
-		display_prompt_msg(vars);
-		//get_next_line(0, &vars->user_input);
-		get_input(vars, &vars->user_input);
-		parsed_input = parse_input(vars, vars->user_input);
-		if (parsed_input != NULL)
+		display_prompt_msg(vars, ac, av);
+		get_next_line(0, &vars->user_input);
+		vars->commands = ft_strsplit(vars->user_input, ';');
+		i = 0;
+		while (vars->commands[i])
 		{
-			if (is_builtin(parsed_input))
-				run_commands(parsed_input, vars);
-			else
-				parse_execute(vars, parsed_input);
-			if (parsed_input)
-				free_tbl(parsed_input);
+			parsed_input = parse_input(vars, vars->commands[i]);
+			if (parsed_input != NULL)
+			{
+				if (is_builtin(parsed_input))
+					run_commands(parsed_input, vars);
+				else
+					parse_execute(vars, parsed_input);
+				if (parsed_input)
+					free_tbl(parsed_input);
+			}
+			++i;
 		}
+		if (vars->commands)
+			free_tbl(vars->commands);
 		if (vars->user_input)
 			free(vars->user_input);
 	}

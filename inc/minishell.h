@@ -29,6 +29,7 @@ typedef struct	s_vars
 	char	**g_envv;
 	t_list	*hist;
 	char	*user_input;
+	char	**commands;
 }				t_vars;
 
 void			print_myenv(t_vars *vars);
@@ -48,7 +49,7 @@ void			free_tbl(char **tbl);
 int				ft_strchri_last(const char *s, int c);
 int				empty(char *s);
 
-void			display_prompt_msg(t_vars *vars);
+void			display_prompt_msg(t_vars *vars, int ac, char **av);
 
 void			echo_builtin(t_vars *vars, char *string, int no_newline);
 void			parse_echo(t_vars *vars, char **command);
