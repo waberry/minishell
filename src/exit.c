@@ -6,7 +6,7 @@
 /*   By: wdaher-a <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/29 20:27:52 by wdaher-a          #+#    #+#             */
-/*   Updated: 2019/09/29 20:28:02 by wdaher-a         ###   ########.fr       */
+/*   Updated: 2019/10/23 19:40:12 by berry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ static void	free_lst(t_list *l)
 	}
 	l = NULL;
 }
-
 
 void		exit_shell(t_vars *vars)
 {

@@ -54,7 +54,7 @@ static void		get_input(t_vars *vars, char **input)
 	{
 		if (buf == '\n')
 			break ;
-		if (ft_strcmp(&buf, "^[[A") == 0)
+		if (&buf[0] == '^[[A')
 			ft_putendl("UP");
 		*(*input + i++) = buf;
 		*input = ft_realloc(*input, count, count + 1);
