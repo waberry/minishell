@@ -40,14 +40,13 @@ void			change_value(t_vars *vars, char **command);
 void			parse_setenv(t_vars *vars, char **command);
 
 int				get_tbl_len(char **tbl);
-void			*ft_realloc(void *ptr, size_t prev_size, size_t new_size);
 char			*get_var(t_vars *vars, char *varname);
 int				get_var_index(t_vars *vars, char *varname);
 void			remove_quotes(char **s);
 void			get_varname(char *var, char *tmp);
 void			free_tbl(char **tbl);
 int				ft_strchri_last(const char *s, int c);
-int				empty(char *s);
+int				not_empty(char *s);
 
 void			display_prompt_msg(t_vars *vars, int ac, char **av);
 
@@ -56,6 +55,7 @@ void			parse_echo(t_vars *vars, char **command);
 
 void			parse_unsetenv(t_vars *vars, char **command);
 
+void			cd_builtin(t_vars *vars, char *newcwd);
 void			parse_cd(t_vars *vars, char **command);
 
 void			bold_blue(void);

@@ -22,7 +22,7 @@ int		get_tbl_len(char **tbl)
 	return (count);
 }
 
-int		empty(char *s)
+int		not_empty(char *s)
 {
 	int		res;
 	size_t	i;
@@ -31,27 +31,11 @@ int		empty(char *s)
 	i = 0;
 	while (s && s[i])
 	{
-		if ((s[i] >= 65 && s[i] <= 90) || (s[i] >= 97 && s[i] <= 122))
+		if (s[i] != '\t' || s[i] != ' ' || s[i] != '\n')
 			return (1);
 		++i;
 	}
 	return (0);
-}
-
-void	*ft_realloc(void *ptr, size_t prev_size, size_t new_size)
-{
-	void	*new;
-
-	if (!ptr)
-		return (NULL);
-	if (!(new = ft_memalloc(new_size)))
-	{
-		free(ptr);
-		return (NULL);
-	}
-	ft_memcpy(new, ptr, prev_size < new_size ? prev_size : new_size);
-	free(ptr);
-	return (new);
 }
 
 void	get_varname(char *var, char *tmp)

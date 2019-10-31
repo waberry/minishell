@@ -38,6 +38,8 @@ void		exit_shell(t_vars *vars)
 	free_tbl(vars->g_envv);
 	if (vars->user_input)
 		free(vars->user_input);
+	if (vars->commands != NULL)
+		free_tbl(vars->commands);
 	free(vars);
 	exit(0);
 }

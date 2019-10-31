@@ -6,11 +6,26 @@
 /*   By: wdaher-a <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/29 18:32:42 by wdaher-a          #+#    #+#             */
-/*   Updated: 2019/09/29 18:36:07 by wdaher-a         ###   ########.fr       */
+/*   Updated: 2019/10/28 19:48:08 by wdaher-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static void		tilde_handler(t_vars *vars, char *tilded_path)
+{
+	char	tmp_buff[PATH_MAX];
+
+	if (!tilded_path || ft_strlen(tilded_path) <= 1 || tilded_path[0] != '~')
+		return ;
+	ft_bzero(tmp_buff, PATH_MAX);
+	ft_memcpy(tmp_buff, get_var(vars, "HOME"),
+		ft_strlen(get_var(vars, "HOME")));
+	ft_strcat(tmp_buff, (tilded_path + 1));
+	ft_bzero(tilded_path, PATH_MAX);
+	ft_memcpy(tilded_path, tmp_buff, ft_strlen(tmp_buff));
+	ft_bzero(tmp_buff, PATH_MAX);
+}
 
 static void		save_pwd(t_vars *vars)
 {
@@ -55,7 +70,7 @@ static int		check_access(char *path)
 	return (ret);
 }
 
-static void		cd_builtin(t_vars *vars, char *newcwd)
+void			cd_builtin(t_vars *vars, char *newcwd)
 {
 	int		i;
 	char	tmp[PATH_MAX];
@@ -83,33 +98,11 @@ static void		cd_builtin(t_vars *vars, char *newcwd)
 	}
 }
 
-
-void static		add_home_path(t_vars *vars, char *path)
-{
-	char	tmp[PATH_MAX];
-
-	if (!path || ft_strchr(path, '~') == NULL)
-		return ;
-	if (ft_strlen(path) > 1 && path[0] == '~')
-	{
-		ft_bzero(tmp, PATH_MAX);
-		ft_strcat(tmp, get_var(vars, "HOME"));
-		ft_strcat(tmp, (path + 1));
-		ft_bzero(path, PATH_MAX);
-		ft_strcat(path, tmp);
-		ft_bzero(tmp, PATH_MAX);
-	}
-}
-
 void			parse_cd(t_vars *vars, char **command)
 {
 	char	tmp_buff1[PATH_MAX];
-	char	tmp_buff2[PATH_MAX];
-	char	tmp_buff3[PATH_MAX];
 
 	ft_bzero(tmp_buff1, PATH_MAX);
-	ft_bzero(tmp_buff2, PATH_MAX);
-	ft_bzero(tmp_buff3, PATH_MAX);
 	if (!command || !*command)
 		return ;
 	if (command[1] && command[1][0] == '\"')
@@ -122,16 +115,14 @@ void			parse_cd(t_vars *vars, char **command)
 		cd_builtin(vars, get_var(vars, (command[1] + 1)));
 	else if (ft_strcmp(command[1], "..") == 0)
 	{
-		ft_strcat(tmp_buff2, get_var(vars, "PWD"));
-		ft_memcpy(tmp_buff1, tmp_buff2, ft_strchri_last(tmp_buff2, '/'));
+		ft_memcpy(tmp_buff1, get_var(vars, "PWD"),
+			ft_strchri_last(get_var(vars, "PWD"), '/'));
 		cd_builtin(vars, tmp_buff1);
-		ft_bzero(tmp_buff1, PATH_MAX);
-		ft_bzero(tmp_buff2, PATH_MAX);
 	}
 	else
 	{
-		ft_strcat(tmp_buff3, command[1]);
-		add_home_path(vars, tmp_buff3);
-		cd_builtin(vars, tmp_buff3);
+		ft_strcat(tmp_buff1, command[1]);
+		tilde_handler(vars, tmp_buff1);
+		cd_builtin(vars, tmp_buff1);
 	}
 }
