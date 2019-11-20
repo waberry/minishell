@@ -24,14 +24,12 @@ int		get_tbl_len(char **tbl)
 
 int		not_empty(char *s)
 {
-	int		res;
 	size_t	i;
 
-	res = 0;
 	i = 0;
 	while (s && s[i])
 	{
-		if (s[i] != '\t' || s[i] != ' ' || s[i] != '\n')
+		if (s[i] != '\t' && s[i] != ' ' && s[i] != '\n')
 			return (1);
 		++i;
 	}

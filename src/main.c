@@ -23,32 +23,26 @@ void			display_prompt_msg(t_vars *vars, int ac, char **av)
 	ft_putstr("\033[0m\033[34m═\033[0m\033[35m—\033[0m$ ");
 }
 
-static char		**parse_input(t_vars *vars, char *user_input)
+static char		**parse_input(char *user_input)
 {
 	char	**tmp;
 	char	tmp_buff[1024];
 	int		i;
 
 	tmp = NULL;
-	if (!user_input)
-		return (tmp);
-	if (!not_empty(user_input))
+	if (!user_input || !not_empty(user_input))
 		return (tmp);
 	tmp = ft_strsplit(user_input, '\t');
 	ft_bzero(tmp_buff, 1024);
 	i = 0;
 	while (tmp[i])
 	{
-		ft_strcat(tmp_buff, " ");
 		ft_strcat(tmp_buff, tmp[i]);
+		ft_strcat(tmp_buff, " ");
 		++i;
 	}
 	free_tbl(tmp);
 	tmp = ft_strsplit(tmp_buff, ' ');
-	if (vars->hist == NULL)
-		vars->hist = ft_lstnew(tmp_buff, ft_strlen(tmp_buff));
-	else
-		ft_lstadd(&vars->hist, ft_lstnew(tmp_buff, ft_strlen(tmp_buff)));
 	return (tmp);
 }
 
@@ -58,6 +52,7 @@ static void		in_process_free(t_vars *vars)
 		free(vars->user_input);
 	if (vars->commands != NULL)
 		free_tbl(vars->commands);
+	vars->commands = NULL;
 }
 
 static void		handle_command(t_vars *vars, char **parsed_input)
@@ -83,9 +78,16 @@ int				main(int ac, char **av, char **env)
 		if (not_empty(vars->user_input))
 			vars->commands = ft_strsplit(vars->user_input, ';');
 		i = -1;
-		while (vars->commands && vars->commands[++i])
+		while (vars->commands != NULL && vars->commands[++i])
 		{
-			parsed_input = parse_input(vars, vars->commands[i]);
+			parsed_input = parse_input(vars->commands[i]);
+			int j = 0;
+			ft_putendl("parsed input : ");
+			while (parsed_input && parsed_input[j])
+			{
+				ft_putendl(parsed_input[j]);
+				++j;
+			}
 			if (parsed_input != NULL)
 				handle_command(vars, parsed_input);
 		}

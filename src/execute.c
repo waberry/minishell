@@ -79,6 +79,10 @@ void		execute(t_vars *vars, char **command)
 	free_tbl(path);
 }
 
+/*
+ ** Gerer les quotes que quand c'est pertinent
+ ** pertinance = var_env,..ect test shell
+*/
 void		parse_execute(t_vars *vars, char **command)
 {
 	int		i;
@@ -89,8 +93,6 @@ void		parse_execute(t_vars *vars, char **command)
 	i = 1;
 	while (command[i])
 	{
-		if (command[i] && command[i][0] == '\"')
-			remove_quotes(&command[i]);
 		if (command[i] && command[i][0] == '$')
 		{
 			tmp = ft_strdup((command[i] + 1));
