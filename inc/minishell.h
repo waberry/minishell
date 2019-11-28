@@ -65,6 +65,8 @@ void			display_prompt_msg(t_vars *vars, int ac, char **av);
 void			get_input(char **input);
 
 int				run_commands(char **command, t_vars *vars);
+void			exec_without_path(char *bin_path, char **command, t_vars *vars);
+int				is_directory(const char *path);
 
 int				is_builtin(char **command);
 void			execute(t_vars *vars, char **command);

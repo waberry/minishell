@@ -69,4 +69,6 @@ void			parse_echo(t_vars *vars, char **command)
 		if (ft_strcmp(command[1], "-n") != 0)
 			ft_putchar('\n');
 	}
+	else
+		ft_putchar('\n');
 }

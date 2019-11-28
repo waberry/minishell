@@ -43,15 +43,6 @@ static void	format_path(char *buffer, char *binname, char *path)
 		ft_strcpy(buffer, binname);
 }
 
-static int	is_directory(const char *path)
-{
-	struct stat	path_stat;
-
-	if (lstat(path, &path_stat) == -1)
-		return (0);
-	return (S_IFDIR & path_stat.st_mode);
-}
-
 void		execute(t_vars *vars, char **command)
 {
 	char			**path;
@@ -63,7 +54,7 @@ void		execute(t_vars *vars, char **command)
 	if (get_var(vars, "PATH"))
 		path = ft_strsplit(get_var(vars, "PATH"), ':');
 	j = -1;
-	while (path && path[++j])
+	while ((path && path[++j]))
 	{
 		format_path(buffer, command[0], path[j]);
 		if (!is_directory(buffer) && (access(buffer, X_OK)) != -1)
@@ -75,9 +66,7 @@ void		execute(t_vars *vars, char **command)
 			return ;
 		}
 	}
-	ft_putstr("minishell: command not found: ");
-	ft_putendl(command[0]);
-	free_tbl(path);
+	exec_without_path(command[0], command, vars);
 }
 
 void		parse_execute(t_vars *vars, char **command)
