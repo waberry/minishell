@@ -6,7 +6,7 @@
 /*   By: wdaher-a <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/29 18:31:34 by wdaher-a          #+#    #+#             */
-/*   Updated: 2019/10/28 18:56:41 by wdaher-a         ###   ########.fr       */
+/*   Updated: 2019/11/21 17:34:11 by wdaher-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,14 @@ static char		**parse_input(char *user_input)
 	tmp = ft_strsplit(user_input, '\t');
 	ft_bzero(tmp_buff, 1024);
 	i = 0;
-	while (tmp[i])
+	while (tmp && tmp[i])
 	{
 		ft_strcat(tmp_buff, tmp[i]);
 		ft_strcat(tmp_buff, " ");
 		++i;
 	}
-	free_tbl(tmp);
+	if (tmp)
+		free_tbl(tmp);
 	tmp = ft_strsplit(tmp_buff, ' ');
 	return (tmp);
 }
@@ -53,6 +54,7 @@ static void		in_process_free(t_vars *vars)
 	if (vars->commands != NULL)
 		free_tbl(vars->commands);
 	vars->commands = NULL;
+	vars->user_input = NULL;
 }
 
 static void		handle_command(t_vars *vars, char **parsed_input)
@@ -62,6 +64,7 @@ static void		handle_command(t_vars *vars, char **parsed_input)
 	else
 		parse_execute(vars, parsed_input);
 	free_tbl(parsed_input);
+	parsed_input = NULL;
 }
 
 int				main(int ac, char **av, char **env)
@@ -81,13 +84,6 @@ int				main(int ac, char **av, char **env)
 		while (vars->commands != NULL && vars->commands[++i])
 		{
 			parsed_input = parse_input(vars->commands[i]);
-			int j = 0;
-			ft_putendl("parsed input : ");
-			while (parsed_input && parsed_input[j])
-			{
-				ft_putendl(parsed_input[j]);
-				++j;
-			}
 			if (parsed_input != NULL)
 				handle_command(vars, parsed_input);
 		}

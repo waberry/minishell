@@ -36,7 +36,7 @@ void		exit_shell(t_vars *vars)
 	ptr = vars->hist;
 	free_lst(vars->hist);
 	free_tbl(vars->g_envv);
-	if (vars->user_input)
+	if (vars->user_input != NULL)
 		free(vars->user_input);
 	if (vars->commands != NULL)
 		free_tbl(vars->commands);

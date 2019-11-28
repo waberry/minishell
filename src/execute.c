@@ -6,7 +6,7 @@
 /*   By: wdaher-a <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/29 20:24:12 by wdaher-a          #+#    #+#             */
-/*   Updated: 2019/11/13 15:02:31 by wdaher-a         ###   ########.fr       */
+/*   Updated: 2019/11/21 19:03:55 by wdaher-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ void		execute(t_vars *vars, char **command)
 /*
  ** Gerer les quotes que quand c'est pertinent
  ** pertinance = var_env,..ect test shell
+ ** https://www.gnu.org/software/bash/manual/bash.html#Double-Quotes
 */
 void		parse_execute(t_vars *vars, char **command)
 {
@@ -96,8 +97,11 @@ void		parse_execute(t_vars *vars, char **command)
 		if (command[i] && command[i][0] == '$')
 		{
 			tmp = ft_strdup((command[i] + 1));
-			free(command[i]);
-			command[i] = get_var(vars, tmp);
+			if (get_var(vars, tmp) != NULL)
+			{
+				free(command[i]);
+				command[i] = ft_strdup(get_var(vars, tmp));
+			}
 			free(tmp);
 		}
 		if (ft_strcmp(command[i], "~") == 0)
