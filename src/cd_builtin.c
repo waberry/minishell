@@ -89,10 +89,11 @@ void			cd_builtin(t_vars *vars, char *newcwd)
 		add_var(vars, "PWD", cwd);
 	else
 	{
+		chdir(cwd);
+		getcwd(cwd, PATH_MAX);
 		ft_strcat(tmp, "PWD=");
 		ft_strcat(tmp, cwd);
 		free(vars->g_envv[i]);
-		chdir(cwd);
 		vars->g_envv[i] = ft_strdup(tmp);
 		ft_bzero(tmp, PATH_MAX);
 	}
