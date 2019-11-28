@@ -47,6 +47,7 @@ void	add_var(t_vars *vars, char *varname, char *value)
 	int		init_size;
 	int		i;
 	char	**new_env;
+	char	*tmp;
 
 	init_size = get_tbl_len(vars->g_envv);
 	if (!(new_env = (char **)malloc(sizeof(char *) * (init_size + 2))))
@@ -57,14 +58,10 @@ void	add_var(t_vars *vars, char *varname, char *value)
 		new_env[i] = ft_strdup(vars->g_envv[i]);
 		++i;
 	}
-	new_env[i] = ft_strdup(varname);
-	if (value == NULL)
-		new_env[i] = ft_strjoin(new_env[i], "=@");
-	else
-	{
-		new_env[i] = ft_strjoin(new_env[i], "=");
-		new_env[i] = ft_strjoin(new_env[i], value);
-	}
+	new_env[i] = ft_strjoin(varname, "=");
+	tmp = new_env[i];
+	new_env[i] = ft_strjoin(new_env[i], value);
+	free(tmp);
 	new_env[++i] = NULL;
 	free_tbl(vars->g_envv);
 	vars->g_envv = new_env;
@@ -96,12 +93,14 @@ void	parse_setenv(t_vars *vars, char **command)
 		print_myenv(vars);
 		return ;
 	}
-	if (command[2][0] == '\"')
-		remove_quotes(&command[2]);
+	if (!command[2])
+		return ;
 	if (command[1][0] == '$')
 		return ;
+	if (command[2] && command[2][0] == '\"')
+		remove_quotes(&command[2]);
 	if (get_var_index(vars, command[1]) == -1)
-		add_var(vars, command[1], (!command[2]) ? NULL : command[2]);
+		add_var(vars, command[1], command[2]);
 	else
 		change_value(vars, command);
 }

@@ -60,9 +60,10 @@ void		execute(t_vars *vars, char **command)
 	pid_t			p_id;
 
 	path = NULL;
-	path = ft_strsplit(get_var(vars, "PATH"), ':');
+	if (get_var(vars, "PATH"))
+		path = ft_strsplit(get_var(vars, "PATH"), ':');
 	j = -1;
-	while (path[++j] && path)
+	while (path && path[++j])
 	{
 		format_path(buffer, command[0], path[j]);
 		if (!is_directory(buffer) && (access(buffer, X_OK)) != -1)
@@ -79,11 +80,6 @@ void		execute(t_vars *vars, char **command)
 	free_tbl(path);
 }
 
-/*
- ** Gerer les quotes que quand c'est pertinent
- ** pertinance = var_env,..ect test shell
- ** https://www.gnu.org/software/bash/manual/bash.html#Double-Quotes
-*/
 void		parse_execute(t_vars *vars, char **command)
 {
 	int		i;
@@ -96,8 +92,7 @@ void		parse_execute(t_vars *vars, char **command)
 	{
 		if (command[i] && command[i][0] == '$')
 		{
-			tmp = ft_strdup((command[i] + 1));
-			if (get_var(vars, tmp) != NULL)
+			if ((tmp = ft_strdup((command[i] + 1))) && get_var(vars, tmp))
 			{
 				free(command[i]);
 				command[i] = ft_strdup(get_var(vars, tmp));

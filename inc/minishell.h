@@ -20,9 +20,8 @@
 # include <dirent.h>
 # include <fcntl.h>
 # include "../libft/libft.h"
-# include "../get_next_line/get_next_line.h"
 # include <limits.h>
-# include <termcap.h>
+
 
 typedef struct	s_vars
 {
@@ -47,6 +46,7 @@ void			get_varname(char *var, char *tmp);
 void			free_tbl(char **tbl);
 int				ft_strchri_last(const char *s, int c);
 int				not_empty(char *s);
+void			*ft_realloc(void *ptr, size_t prev_size, size_t new_size);
 
 void			display_prompt_msg(t_vars *vars, int ac, char **av);
 
@@ -60,6 +60,9 @@ void			parse_cd(t_vars *vars, char **command);
 
 void			bold_blue(void);
 void			white(void);
+
+void			display_prompt_msg(t_vars *vars, int ac, char **av);
+void			get_input(char **input);
 
 int				run_commands(char **command, t_vars *vars);
 

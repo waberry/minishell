@@ -12,17 +12,6 @@
 
 #include "minishell.h"
 
-void			display_prompt_msg(t_vars *vars, int ac, char **av)
-{
-	ac = 0;
-	av = NULL;
-	bold_blue();
-	ft_putstr(get_var(vars, "PWD"));
-	white();
-	ft_putstr(" \033[31m︻\033[0m\033[32m┳\033[0m\033[33mデ");
-	ft_putstr("\033[0m\033[34m═\033[0m\033[35m—\033[0m$ ");
-}
-
 static char		**parse_input(char *user_input)
 {
 	char	**tmp;
@@ -77,7 +66,7 @@ int				main(int ac, char **av, char **env)
 	while (1)
 	{
 		display_prompt_msg(vars, ac, av);
-		get_next_line(0, &vars->user_input);
+		get_input(&vars->user_input);
 		if (not_empty(vars->user_input))
 			vars->commands = ft_strsplit(vars->user_input, ';');
 		i = -1;
